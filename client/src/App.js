@@ -5,14 +5,19 @@ function App() {
   const [userName, setUserName] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [users, setUsers] = useState([]);
-  const [data , setData ] = useState([]);
+  const [data, setData] = useState([]);
+  const [editUserId, setEditUserId] = useState(null);
 
-  useEffect(()=>{
+  const fetchdata = () => {
     fetch("http://localhost:4000/fetched-data")
-    .then((response) => response.json())
-    .then(data => setData(data))
-    .catch((error) => console.log(error));
-  })
+      .then((response) => response.json())
+      .then(data => setData(data))
+      .catch((error) => console.log(error));
+  }
+
+  useEffect(() => {
+    fetchdata();
+  }, [])
 
   const handleAddUser = (e) => {
     e.preventDefault();
@@ -27,24 +32,60 @@ function App() {
         setUserName('');
         setUserPassword('');
       })
-      .catch(error => console.error('Error adding user:', error));
+      .then(() => {
+        fetchdata();
+      })
+      .catch(error => console.error(error));
   };
 
-  const handleEditUser = (user) =>{
-  };
+  const handleEdit = (userId) => {
+    const userEdit = data.find(user => user.id === userId);
+    setUserName(userEdit.user_name);
+    setUserPassword(userEdit.user_password);
+    setEditUserId(userId);
+  }
 
-  const handleDelete =(userId) => {
+  const handleUpdate = (userId) => {
+    fetch(`http://localhost:4000/user/${editUserId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ user_name: userName, user_password: userPassword })
+    })
+      .then(response => response.json())
+      .then(updatedUser => {
+        const updatedUsers = users.map(user => {
+          if (user.id === userId) {
+            return updatedUser;
+          } else {
+            return user;
+          }
+        });
+        setUsers(updatedUsers);
+        setData(updatedUsers);
+        setUserName('');
+        setUserPassword('');
+        setEditUserId(null);
+      })
+      .catch(error => console.error(error));
+  }
+
+  const handleDelete = (userId) => {
     fetch(`http://localhost:4000/user/${userId}`, {
       method: 'DELETE',
     })
       .then(() => setUsers(users.filter(user => user.id !== userId)))
+      .then(() => {
+        fetchdata();
+      })
       .catch(error => console.error(error));
   };
 
   return (
     <div className="App">
       <h1>Users List</h1>
-      <form onSubmit={handleAddUser}>
+      <form >
         <input
           type="text"
           value={userName}
@@ -59,38 +100,38 @@ function App() {
           placeholder="User Password"
           required
         />
-        <button type="submit" >Add User</button>
+        <button type="button" onClick={handleAddUser} >Add User</button>
+        <button type="button" onClick={handleUpdate}>Update</button>
+
       </form>
       <br></br><br></br>
+
       <div>
         <table>
           <thead>
             <tr>
               <th>UserName</th>
               <th>Password</th>
-              <th>Actions</th>
+              <th>Actions </th>
+
             </tr>
           </thead>
           <tbody>
-          {data.map((user, i) => (
+            {data.map((user, i) => (
               <tr key={i}>
                 <td>{user.user_name}</td>
                 <td>{user.user_password}</td>
                 <td>
-                <button type = "submit" onClick={() => handleEditUser}>Update</button>
-                <button type = "submit" onClick={() => handleDelete(user.id) }>Delete</button></td>
+                  <button type="button" onClick={() => handleEdit(user.id)}>Edit</button>
+                  <button type="button" onClick={() => handleDelete(user.id)}>Delete</button></td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
     </div>
   );
 }
 
 export default App;
-
-
-
-
-
