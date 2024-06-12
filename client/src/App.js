@@ -55,18 +55,15 @@ function App() {
     })
       .then(response => response.json())
       .then(updatedUser => {
-        const updatedUsers = users.map(user => {
-          if (user.id === userId) {
-            return updatedUser;
-          } else {
-            return user;
-          }
-        });
+        const updatedUsers = users.map(user => updatedUser);
         setUsers(updatedUsers);
         setData(updatedUsers);
         setUserName('');
         setUserPassword('');
         setEditUserId(null);
+      })
+      .then(() => {
+        fetchdata();
       })
       .catch(error => console.error(error));
   }
@@ -102,7 +99,7 @@ function App() {
         />
         <button type="button" onClick={handleAddUser} >Add User</button>
         <button type="button" onClick={handleUpdate}>Update</button>
-
+        
       </form>
       <br></br><br></br>
 

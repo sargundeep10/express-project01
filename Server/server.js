@@ -23,7 +23,7 @@ app.patch('/user/:id', (req, res) => {
     const { id } = req.params;
     console.log("===id===", id)
     const { user_name, user_password } = req.body;
-    const UpdateSt = `'UPDATE users_data SET user_name = $1, user_password = $2 WHERE id = $3 RETURNING *;'`;
+    const UpdateSt = 'UPDATE users_data SET user_name = $1, user_password = $2 WHERE id = $3 RETURNING *;';
     pool.query(UpdateSt, [user_name, user_password, id])
         .then(result => res.json(result.rows[0]))
         .catch(error => {
