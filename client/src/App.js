@@ -90,7 +90,6 @@ function App() {
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
           placeholder="User Name"
-          required
         />
         <label>Password:</label>
         <input
@@ -98,7 +97,6 @@ function App() {
           value={userPassword}
           onChange={(e) => setUserPassword(e.target.value)}
           placeholder="User Password"
-          required
         />
         <button className='buttonMain' type="button" onClick={handleAddUser} >REGISTER</button>
         <button className='buttonMain' type="button" onClick={handleUpdate}>UPDATE</button>
