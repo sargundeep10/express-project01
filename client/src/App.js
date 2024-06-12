@@ -80,9 +80,11 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Users List</h1>
+    <div>
+      <div className="App">
+      <h2>USER REGISTRATION FORM</h2>
       <form >
+        <label>Username:</label>
         <input
           type="text"
           value={userName}
@@ -90,6 +92,7 @@ function App() {
           placeholder="User Name"
           required
         />
+        <label>Password:</label>
         <input
           type="password"
           value={userPassword}
@@ -97,11 +100,14 @@ function App() {
           placeholder="User Password"
           required
         />
-        <button type="button" onClick={handleAddUser} >Add User</button>
-        <button type="button" onClick={handleUpdate}>Update</button>
+        <button className='buttonMain' type="button" onClick={handleAddUser} >REGISTER</button>
+        <button className='buttonMain' type="button" onClick={handleUpdate}>UPDATE</button>
         
       </form>
       <br></br><br></br>
+
+    </div>
+    
 
       <div>
         <table>
