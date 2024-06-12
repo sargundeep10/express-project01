@@ -8,7 +8,7 @@ app.use(cors());
 
 app.post('/user', (req, res) => {
     const { user_name, user_password } = req.body;
-    const insertSt = `INSERT INTO USERS_DATA (user_name, user_password) VALUES ($1, $2) RETURNING *;`;
+    const insertSt = 'INSERT INTO USERS_DATA (user_name, user_password) VALUES ($1, $2) RETURNING *;';
     pool.query(insertSt, [user_name, user_password])
         .then(newUser => {
             console.log("User added:", newUser.rows[0]);
