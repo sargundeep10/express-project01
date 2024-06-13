@@ -9,7 +9,7 @@ function App() {
   const [editUserId, setEditUserId] = useState(null);
 
   const fetchdata = () => {
-    fetch("http://localhost:4000/user/-data")
+    fetch("http://localhost:4000/user/data")
       .then((response) => response.json())
       .then(data => setData(data))
       .catch((error) => console.log(error));
